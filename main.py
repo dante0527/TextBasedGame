@@ -18,6 +18,15 @@ current_room = "Liminal Space"
 # List to track inventory
 inventory = []
 
+# Welcome and instructions
+print("                 Welcome to Shadow Game\n\
+    You must collect all six items before fighting the boss.\n\
+    Moves:  'go {direction}' (travel north, south, east, or west)\n\
+            'get {item}' (add item to inventory)\n\
+            'fight' (fight boss)")
+
+input("\nPress enter to start...")
+
 # Gameplay loop
 while True:
     # Start-of-turn message
@@ -30,6 +39,9 @@ while True:
         if nearby_item not in inventory:
             print(f"You see a {nearby_item}")
 
+    if "Boss" in rooms[current_room].keys():
+        print("You see a shadow of yourself.")
+
     # Accepts user input
     user_input = input('Enter your move:\n')
     # Splits move into words
@@ -39,6 +51,15 @@ while True:
     action = next_move[0]
     if len(next_move) > 1:
         object = next_move[1].title()
+
+    if current_room == 'Dojo':
+        if action == 'fight':
+            if len(inventory) < 6:
+                print("You came unprepared. Your shadow consumes you.\nGAME OVER")
+                break
+            else:
+                print("\nYou approach your shadow and offer him an altoid.\nIt accepts your offering and allows you to leave.\nYOU WIN")
+                break
 
     # If action is 'go'
     #   set current_room to room associated with object
@@ -63,6 +84,7 @@ while True:
                 print(f"Can't find {object}.")
         except:
             print("You can't get that item")
+
     # Exit command breaks while-loop and terminates program
     elif action == 'exit':
         break
@@ -70,10 +92,3 @@ while True:
     else:
         print("Invalid command")
     
-    if current_room == 'Dojo':
-        if len(inventory) < 6:
-            print("You came unprepared. Your shadow consumes you.\nGAME OVER")
-            break
-        else:
-            print("You approach your shadow and offer him an altoid.\nIt accepts your offering and allows you to leave.\nYOU WIN")
-            break
