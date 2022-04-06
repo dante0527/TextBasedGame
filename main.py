@@ -7,8 +7,8 @@ rooms = {
         'Bazaar' : {'West': 'Liminal Space', 'North': 'Meat Locker', 'East': 'Dojo', 'Item': 'Altoids'},
         'Meat Locker' : {'South': 'Bazaar', 'East': 'Quicksand Pit', 'Item': 'Fig'},
         'Quicksand Pit': {'West': 'Meat Locker', 'Item': 'Robe'},
-        'Dojo': {'West': 'Bazaar', 'Boss': 'Shadowman'},
-        'Volcano': {'West': 'Bat Cavern', 'Item': 'Elderberry'}
+        'Volcano': {'West': 'Bat Cavern', 'Item': 'Elderberry'},
+        'Dojo': {'West': 'Bazaar', 'Boss': 'Shadowman'}
     }
 
 # Variable to track current room
@@ -24,11 +24,9 @@ while True:
     print(f"\nYou are in the {current_room}\nInventory : {inventory}\n{'-' * 27}")
 
     # Tracks current room's item if there is one
-    if "Item" in rooms[current_room].keys():
-        nearby_item = rooms[current_room]["Item"]
-
     # If there is an item in current_room that isn't in your inventory, tell the user
     if "Item" in rooms[current_room].keys():
+        nearby_item = rooms[current_room]["Item"]
         if nearby_item not in inventory:
             print(f"You see a {nearby_item}")
 
@@ -71,3 +69,11 @@ while True:
     # If user_input is invalid, the user is notified and the while-loop continues
     else:
         print("Invalid command")
+    
+    if current_room == 'Dojo':
+        if len(inventory) < 6:
+            print("You came unprepared. Your shadow consumes you.\nGAME OVER")
+            break
+        else:
+            print("You approach your shadow and offer him an altoid.\nIt accepts your offering and allows you to leave.\nYOU WIN")
+            break
