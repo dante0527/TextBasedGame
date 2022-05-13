@@ -1,3 +1,5 @@
+import os
+
 # A dictionary for the simplified dragon text game
 # The dictionary links a room to other rooms
 rooms = {
@@ -18,17 +20,29 @@ current_room = "Liminal Space"
 # List to track inventory
 inventory = []
 
-# Welcome and instructions
-print("                 Welcome to Shadow Game\n\
-    You must collect all six items before fighting the boss.\n\
-    Moves:  'go {direction}' (travel north, south, east, or west)\n\
-            'get {item}' (add item to inventory)\n\
-            'fight' (fight boss)")
+# clear terminal
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
+
+
+# Welcome and instructions
+def prompt():        
+    print("                 Welcome to Shadow Game\n\
+        You must collect all six items before fighting the boss.\n\
+        Moves:  'go {direction}' (travel north, south, east, or west)\n\
+                'get {item}' (add item to inventory)\n\
+                'fight' (fight boss)")
+
+clear()
+prompt()
 input("\nPress enter to start...")
+
+clear()
 
 # Gameplay loop
 while True:
+    prompt()
     # Start-of-turn message
     print(f"\nYou are in the {current_room}\nInventory : {inventory}\n{'-' * 27}")
 
@@ -91,4 +105,7 @@ while True:
     # If user_input is invalid, the user is notified and the while-loop continues
     else:
         print("Invalid command")
+
+    input("Press enter to try something else...")
+    clear()
     
