@@ -116,7 +116,7 @@ while True:
     #           add item to inventory
     elif action == 'get':
         try:
-            if object in rooms[current_room]["Item"]:
+            if object == rooms[current_room]["Item"]:
 
                 if object not in inventory:
 
