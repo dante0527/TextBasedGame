@@ -1,7 +1,7 @@
 import os
 
 from PIL import Image                                                                                
-img = Image.open('ShadowGameMap.png')
+img = Image.open('Map.png')
 img.show() 
 
 
@@ -116,7 +116,7 @@ while True:
     #           add item to inventory
     elif action == 'get':
         try:
-            if object in rooms[current_room].values():
+            if object in rooms[current_room]["Item"]:
 
                 if object not in inventory:
 
@@ -128,9 +128,8 @@ while True:
 
             else:
                 print(f"Can't find {object}.")
-
         except:
-            print("You can't get that item")
+            print(f"Can't find {object}")
 
     # Exit command breaks while-loop and terminates program
     elif action == 'exit':
