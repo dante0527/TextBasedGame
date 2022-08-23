@@ -13,9 +13,11 @@ def prompt():
         \t'get {item}' (add nearby item to inventory)\n\n\
         Press any key to continue...")
 
+
 # Clear screen
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
+
 
 # Map
 rooms = {
@@ -26,7 +28,7 @@ rooms = {
     'Meat Locker' : {'South': 'Bazaar', 'East': 'Quicksand Pit', 'Item': 'Fig'},
     'Quicksand Pit': {'West': 'Meat Locker', 'Item': 'Robe'},
     'Volcano': {'West': 'Bat Cavern', 'Item': 'Elderberry'},
-    'Dojo': {'West': 'Bazaar', 'Boss': 'Shadowman'}
+    'Dojo': {'West': 'Bazaar', 'Boss': 'Shadow Man'}
     }
 
 # List of vowels
@@ -71,6 +73,17 @@ while True:
 
             else:
                 print(f"You see a {nearby_item}")
+    
+    # Boss encounter
+    if "Boss" in rooms[current_room].keys():
+
+        if len(inventory) < 6:
+            print(f"You lost a fight with {rooms[current_room]['Boss']}.")
+            break
+
+        else:
+            print(f"You beat {rooms[current_room]['Boss']}!")
+            break
 
     # Accepts player's move as input
     user_input = input("Enter your move:\n")
