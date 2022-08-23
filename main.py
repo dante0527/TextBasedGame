@@ -1,61 +1,62 @@
 import os
+from PIL import Image
 
-from PIL import Image                                                                                
+# Show map
 img = Image.open('Map.png')
-img.show() 
+img.show()
 
+# Display starting menu
+def prompt():
+    print("\t\t\tWelcome to my game\n\n\
+        You must collect all six items before fighting the boss.\n\n\
+        Moves:\t'go {direction}' (travel north, south, east, or west)\n\
+        \t'get {item}' (add nearby item to inventory)\n\n\
+        Press any key to continue...")
 
-# A dictionary for the simplified dragon text game
-# The dictionary links a room to other rooms
+# Clear screen
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+# Map
 rooms = {
-        'Liminal Space': {'North': 'Mirror Maze', 'South': 'Bat Cavern', 'East': 'Bazaar'},
-        'Mirror Maze': {'South': 'Liminal Space', 'Item': 'Crystal'},
-        'Bat Cavern': {'North': 'Liminal Space', 'East': 'Volcano', 'Item': 'Staff'},
-        'Bazaar' : {'West': 'Liminal Space', 'North': 'Meat Locker', 'East': 'Dojo', 'Item': 'Altoids'},
-        'Meat Locker' : {'South': 'Bazaar', 'East': 'Quicksand Pit', 'Item': 'Fig'},
-        'Quicksand Pit': {'West': 'Meat Locker', 'Item': 'Robe'},
-        'Volcano': {'West': 'Bat Cavern', 'Item': 'Elderberry'},
-        'Dojo': {'West': 'Bazaar', 'Boss': 'Shadowman'}
+    'Liminal Space': {'North': 'Mirror Maze', 'South': 'Bat Cavern', 'East': 'Bazaar'},
+    'Mirror Maze': {'South': 'Liminal Space', 'Item': 'Crystal'},
+    'Bat Cavern': {'North': 'Liminal Space', 'East': 'Volcano', 'Item': 'Staff'},
+    'Bazaar' : {'West': 'Liminal Space', 'North': 'Meat Locker', 'East': 'Dojo', 'Item': 'Altoids'},
+    'Meat Locker' : {'South': 'Bazaar', 'East': 'Quicksand Pit', 'Item': 'Fig'},
+    'Quicksand Pit': {'West': 'Meat Locker', 'Item': 'Robe'},
+    'Volcano': {'West': 'Bat Cavern', 'Item': 'Elderberry'},
+    'Dojo': {'West': 'Bazaar', 'Boss': 'Shadowman'}
     }
 
+# List of vowels
 vowels = ['a', 'e', 'i', 'o', 'u']
-
-# Variable to track current room
-# Initialized with starting room
-current_room = "Liminal Space"
 
 # List to track inventory
 inventory = []
 
-# clear terminal
-def clear():
-    os.system('cls' if os.name == 'nt' else 'clear')
+# Tracks current room
+current_room = "Liminal Space"
 
-
-
-# Welcome and instructions
-def prompt():        
-    print("                 Welcome to Shadow Game\n\
-        You must collect all six items before fighting the boss.\n\
-        Moves:  'go {direction}' (travel north, south, east, or west)\n\
-                'get {item}' (add item to inventory)\n\
-                'fight' (fight boss)")
+# Tracks last move
+msg = ""
 
 clear()
 prompt()
-input("\nPress enter to start...")
-
-clear()
+input()
 
 # Gameplay loop
 while True:
 
-    prompt()
-    # Start-of-turn message
-    print(f"\nYou are in the {current_room}\nInventory : {inventory}\n{'-' * 27}")
+    clear()
 
-    # Tracks current room's item if there is one
-    # If there is an item in current_room that isn't in your inventory, tell the user
+    # Display player info
+    print(f"You are in the {current_room}\nInventory : {inventory}\n{'-' * 27}")
+
+    # Display msg
+    print(msg)
+
+    # If there is an item in current _room that isn't in inventory, tell the player
     if "Item" in rooms[current_room].keys():
 
         nearby_item = rooms[current_room]["Item"]
@@ -65,80 +66,62 @@ while True:
             if nearby_item[-1] == 's':
                 print(f"You see {nearby_item}")
 
-            elif nearby_item[1] in vowels:
+            elif nearby_item[0] in vowels:
                 print(f"You see an {nearby_item}")
 
             else:
                 print(f"You see a {nearby_item}")
 
-    if "Boss" in rooms[current_room].keys():
-        print("You see a shadow of yourself.")
-
-    # Accepts user input
-    user_input = input('Enter your move:\n')
+    # Accepts player's move as input
+    user_input = input("Enter your move:\n")
 
     # Splits move into words
     next_move = user_input.split(' ')
 
-    # action determines what the user wants to do
-    # object determines where the action is directed
-    action = next_move[0]
+    # First word is action
+    action = next_move[0].title()
 
+    # Second word is object or direction
     if len(next_move) > 1:
-        object = next_move[1].title()
+        item = next_move[1:]
+        direction = next_move[1].title()
 
-    if current_room == 'Dojo':
+        item = " ".join(item).title()
 
-        if action == 'fight':
-
-            if len(inventory) < 6:
-                print("You came unprepared. Your shadow consumes you.\nGAME OVER")
-                break
-
-            else:
-                print("\nYou approach your shadow and offer him an altoid.\nIt accepts your offering and allows you to leave.\nYOU WIN")
-                break
-
-    # If action is 'go'
-    #   set current_room to room associated with object
-    if action == 'go':
+    # Moving between rooms
+    if action == "Go":
 
         try:
-            current_room = rooms[current_room][object]
-            print(f"You travel {object}", end='')
+            current_room = rooms[current_room][direction]
+            msg = f"You travel {direction}"
 
         except:
-            print("You can't go that way.")
-           
-    # If action is 'get'
-    #   if item is present
-    #       if item is not in inventory
-    #           add item to inventory
-    elif action == 'get':
-        try:
-            if object == rooms[current_room]["Item"]:
+            msg = "You can't go that way."
+    
+    # Picking up items
+    elif action == "Get":
 
-                if object not in inventory:
+        try:
+            if item == rooms[current_room]["Item"]:
+
+                if item not in inventory:
 
                     inventory.append(rooms[current_room]["Item"])
-                    print(f"{object} retrieved!")
+                    msg = f"{item} retrieved!"
 
                 else:
-                    print(f"You already have the {object}.")
-
+                    msg = f"You already have the {item}"
+            
             else:
-                print(f"Can't find {object}.")
+                msg = f"Can't find {item}"
+        
         except:
-            print(f"Can't find {object}")
-
-    # Exit command breaks while-loop and terminates program
-    elif action == 'exit':
+            msg = f"Can't find {item}"
+    
+    # Exit program
+    elif action == "Exit":
         break
 
-    # If user_input is invalid, the user is notified and the while-loop continues
+    # Any other commands invalid
     else:
-        print("Invalid command")
-        
-    input()
-    clear()
-    
+        msg = "Invalid command"
