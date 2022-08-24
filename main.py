@@ -58,7 +58,7 @@ while True:
     # Display msg
     print(msg)
 
-    # If there is an item in current _room that isn't in inventory, tell the player
+    # Item indicator
     if "Item" in rooms[current_room].keys():
 
         nearby_item = rooms[current_room]["Item"]
