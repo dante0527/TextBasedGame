@@ -7,11 +7,12 @@ img.show()
 
 # Display starting menu
 def prompt():
-    print("\t\t\tWelcome to my game\n\n\
-        You must collect all six items before fighting the boss.\n\n\
-        Moves:\t'go {direction}' (travel north, south, east, or west)\n\
-        \t'get {item}' (add nearby item to inventory)\n\n\
-        Press any key to continue...")
+    print("\t\tWelcome to my game\n\n\
+You must collect all six items before fighting the boss.\n\n\
+Moves:\t'go {direction}' (travel north, south, east, or west)\n\
+\t'get {item}' (add nearby item to inventory)\n")
+
+    input("Press any key to continue...")
 
 
 # Clear screen
@@ -45,7 +46,6 @@ msg = ""
 
 clear()
 prompt()
-input()
 
 # Gameplay loop
 while True:
